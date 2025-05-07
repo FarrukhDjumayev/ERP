@@ -11,17 +11,17 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
-    console.log('Yuborilayotgan values:', values); // 👈 bu yerda aniq ko'ramiz
+    console.log('Yuborilayotgan values:', values);
 
     try {
       setLoading(true);
 
       const response = await API.post("/accounts/login/", {
-        phone_number: values.phone_number.trim(), // 🔥 Space larni olib tashlayapmiz
-        password: values.password.trim(),          // 🔥 Passwordda ham
+        phone_number: values.phone_number.trim(), 
+        password: values.password.trim(),          
       }, {
         headers: {
-          "Content-Type": "application/json", // 🔥 header aniq berilmoqda
+          "Content-Type": "application/json", 
         }
       });
 

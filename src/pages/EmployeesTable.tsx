@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import API from "../utils/api";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchEmployees } from "../store/slices/employeeSlice";
+import { fetchBranches } from "../store/slices/branchSlice";
 import {
   Table,
   Input,
@@ -9,54 +11,32 @@ import {
   Typography,
 } from "antd";
 import { PlusOutlined, MoreOutlined } from "@ant-design/icons";
+import unknownPic from "../assets/pic.webp"
 
 const { Option } = Select;
 const { Text } = Typography;
 
-// Tiplar
-type User = {
-  full_name: string;
-  gender: string | null;
-  phone_number: string;
-  passport_number: string | null;
-  jshshr: string | null;
-  birth_date: string | null;
-  salary_type: string | null;
-};
-
-type Employee = {
-  id: number;
-  user: User;
-  user_full_name: string;
-  user_role: string;
-  branch_name: string;
-  position: string;
-  salary: string;
-  official_salary: string;
-  start_time: string;
-  end_time: string;
-};
-
 export default function EmployeeTable() {
-  const [employees, setEmployees] = useState<Employee[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
   const [search, setSearch] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState<number | null>(1);
+
+  const { data: employees, loading, error } = useAppSelector(
+    (state) => state.employees
+  );
+  const { data: branches } = useAppSelector((state) => state.branches);
 
   useEffect(() => {
-    API.get("/employee/employees/branch/1/")
-      .then((res) => {
-        setEmployees(res.data.results);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError("Ma'lumot yuklanmadi. Token yoki ruxsatni tekshiring.");
-        setLoading(false);
-        console.error(err);
-      });
-  }, []);
+    dispatch(fetchBranches());
+  }, [dispatch]);
 
-  const filtered = employees.filter((emp) =>
+  useEffect(() => {
+    if (selectedBranch !== null) {
+      dispatch(fetchEmployees(selectedBranch));
+    }
+  }, [dispatch, selectedBranch]);
+
+  const filtered = employees.filter((emp: any) =>
     emp.user_full_name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -70,8 +50,18 @@ export default function EmployeeTable() {
     {
       title: "F.I.SH",
       dataIndex: "user_full_name",
-      render: (text: string) => <Text className="text-blue-600">{text}</Text>,
+      render: (text: string) => (
+        <div className="flex items-center gap-2">
+          <img
+            src={unknownPic}
+            alt="User"
+            className="w-8 h-8 rounded-full object-cover"
+          />
+          <Text className="text-blue-600">{text}</Text>
+        </div>
+      ),
     },
+    
     {
       title: "ROLE",
       dataIndex: "user_role",
@@ -88,14 +78,15 @@ export default function EmployeeTable() {
     {
       title: "Smena",
       key: "smena",
-      render: (_: any, record: Employee) =>
+      render: (_: any, record: any) =>
         `${record.start_time} - ${record.end_time}`,
     },
     {
-      title: "Ish boshlagan sana",
-      dataIndex: "start_date",
-      render: () => "--", // APIda yo‘q, placeholder
+      title: "Tug‘ilgan sana",
+      dataIndex: ["user", "birth_date"],
+      render: (date: string) => date ?? "Nomaʼlum",
     },
+    
     {
       title: "",
       key: "actions",
@@ -109,7 +100,6 @@ export default function EmployeeTable() {
 
   return (
     <div className="p-6 bg-white rounded shadow space-y-4">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <Button type="primary" icon={<PlusOutlined />}>
           Xodim qo‘shish
@@ -121,17 +111,24 @@ export default function EmployeeTable() {
             onChange={(e) => setSearch(e.target.value)}
             style={{ width: 200 }}
           />
-          <Select defaultValue="" style={{ width: 180 }}>
-            <Option value="">Filial tanlang</Option>
-            {/* <Option value="1">Filial 1</Option> */}
+          <Select
+            value={selectedBranch ?? ""}
+            onChange={(val: string | number) => setSelectedBranch(Number(val))}
+            style={{ width: 180 }}
+          >
+            {branches.map((branch: any) => (
+              <Option key={branch.id} value={branch.id}>
+                {branch.name}
+              </Option>
+            ))}
           </Select>
+
         </Space>
       </div>
 
-      {/* Jadval */}
       <Table
         columns={columns}
-        dataSource={filtered.map((emp) => ({
+        dataSource={filtered.map((emp: any) => ({
           key: emp.id,
           ...emp,
         }))}

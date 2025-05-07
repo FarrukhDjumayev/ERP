@@ -1,4 +1,3 @@
-// services/API.ts
 import axios from "axios";
 
 const API = axios.create({
@@ -6,7 +5,6 @@ const API = axios.create({
 });
 
 API.interceptors.request.use((config) => {
-  // Login va register so‘rovlariga token qo‘shilmaydi
   if (!config.url?.includes("/login/") && !config.url?.includes("/register/")) {
     const token = localStorage.getItem('token');
     if (token) {

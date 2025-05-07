@@ -7,18 +7,22 @@ function App() {
   const isLoginPage = location.pathname === "/login";
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Navbar always on top */}
+    <div className="h-screen flex flex-col">
+      {/* Navbar */}
       {!isLoginPage && <Navbar />}
 
-      <div className="flex flex-1">
-        {/* Sidebar on the left, under the Navbar */}
-        {!isLoginPage && <Sidebar />}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        {!isLoginPage && (
+          <div className="w-64 h-full sticky top-0 bg-white shadow z-40">
+            <Sidebar />
+          </div>
+        )}
 
-        {/* Main content on the right */}
-        <main className="flex-grow py-6 px-4">
+        {/* Main content */}
+        <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
           <Outlet />
-        </main>
+        </div>
       </div>
     </div>
   );
