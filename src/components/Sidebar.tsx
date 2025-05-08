@@ -21,6 +21,11 @@ export default function Sidebar() {
       label: "Smenalar",
       icon: <GrSchedule size={18} />,
     },
+    {
+      path: "/bolimlar",
+      label: "Bo'limlar",
+      icon: <GrSchedule size={18} />,
+    },
   ];
 
   return (

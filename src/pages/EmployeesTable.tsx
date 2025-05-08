@@ -10,8 +10,8 @@ import {
   Space,
   Typography,
 } from "antd";
-import { PlusOutlined, MoreOutlined } from "@ant-design/icons";
 import unknownPic from "../assets/pic.webp"
+import { FaUserPlus } from "react-icons/fa6";
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -61,7 +61,7 @@ export default function EmployeeTable() {
         </div>
       ),
     },
-    
+
     {
       title: "ROLE",
       dataIndex: "user_role",
@@ -86,12 +86,7 @@ export default function EmployeeTable() {
       dataIndex: ["user", "birth_date"],
       render: (date: string) => date ?? "Nomaʼlum",
     },
-    
-    {
-      title: "",
-      key: "actions",
-      render: () => <MoreOutlined style={{ fontSize: 18, cursor: "pointer" }} />,
-    },
+
   ];
 
   if (error) {
@@ -101,8 +96,8 @@ export default function EmployeeTable() {
   return (
     <div className="p-6 bg-white rounded shadow space-y-4">
       <div className="flex justify-between items-center">
-        <Button type="primary" icon={<PlusOutlined />}>
-          Xodim qo‘shish
+        <Button type="primary">
+          <FaUserPlus /> Xodim qo‘shish
         </Button>
         <Space>
           <Input

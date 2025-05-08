@@ -47,7 +47,7 @@ export default function ProfilePage() {
         />
 
         <div className="flex justify-between items-center p-6">
-          {/* User Info */}
+          
           <div className="flex items-center space-x-4">
             <Avatar
               size={64}
@@ -68,7 +68,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Finance Card */}
+          
           <div
             className="text-start w-[267px] h-[128px] bg-white/30 backdrop-blur-sm border rounded-2xl p-4"
             style={{
@@ -91,7 +91,7 @@ export default function ProfilePage() {
         </div>
       </Card>
 
-      {/* Info Boxes */}
+      
       <div className="grid grid-cols-1 md:grid-cols-3 w-4xl gap-4 mb-6">
         <InfoBox
           icon={<TeamOutlined className="text-blue-600 text-lg" />}

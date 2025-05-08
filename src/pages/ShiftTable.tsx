@@ -6,6 +6,7 @@ import { fetchShifts, createShift, updateShift, deleteShift } from "../store/sli
 import dayjs from "dayjs";
 import { Space, Popconfirm } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FaUserPlus } from "react-icons/fa6";
 
 const { Option } = Select;
 
@@ -22,6 +23,12 @@ const ShiftTable = () => {
   useEffect(() => {
     dispatch(fetchBranches());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (branches.length > 0 && selectedBranch === null) {
+      setSelectedBranch(branches[0].id);
+    }
+  }, [branches, selectedBranch]);
 
   useEffect(() => {
     if (selectedBranch) {
@@ -105,9 +112,9 @@ const ShiftTable = () => {
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
-            
+
           </Button>
-    
+
           <Popconfirm
             title="Ushbu smenani o‘chirmoqchimisiz?"
             onConfirm={() => handleDelete(record.id)}
@@ -115,20 +122,19 @@ const ShiftTable = () => {
             cancelText="Yo‘q"
           >
             <Button danger icon={<DeleteOutlined />}>
-              
+
             </Button>
           </Popconfirm>
         </Space>
       ),
     }
-    
+
   ];
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <Select
-          placeholder="Filialni tanlang"
           style={{ width: 250 }}
           onChange={(value) => setSelectedBranch(value)}
           value={selectedBranch ?? undefined}
@@ -140,8 +146,9 @@ const ShiftTable = () => {
           ))}
         </Select>
 
+
         <Button type="primary" onClick={handleAdd} disabled={!selectedBranch}>
-          Smena qo‘shish
+          <FaUserPlus /> Smena qo‘shish
         </Button>
       </div>
 

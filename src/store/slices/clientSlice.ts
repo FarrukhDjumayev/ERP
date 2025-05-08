@@ -1,6 +1,5 @@
-// src/store/slices/clientsSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import API from "../../utils/api"; // API instance to'g'ri yo'lni import qilamiz
+import API from "../../utils/api";
 
 type Client = {
   id: number;
@@ -24,7 +23,6 @@ const initialState: ClientsState = {
   error: null,
 };
 
-// 1) Fetch qilish uchun thunk
 export const fetchClients = createAsyncThunk(
   "clients/fetchClients",
   async (_, thunkAPI) => {
@@ -37,53 +35,50 @@ export const fetchClients = createAsyncThunk(
   }
 );
 
-// 2) Add client
+
 export const createClient = createAsyncThunk(
   "clients/createClient",
   async (clientData: FormData, thunkAPI) => {
     try {
       const response = await API.post("/company/clients/", clientData);
-      return response.data; // New client added
+      return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-// 3) Update client
 export const updateClient = createAsyncThunk(
   "clients/updateClient",
   async ({ id, clientData }: { id: number, clientData: FormData }, thunkAPI) => {
     try {
       const response = await API.patch(`/company/clients/${id}/`, clientData);
-      return response.data; // Client updated
+      return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-// 4) Delete client
+
 export const deleteClient = createAsyncThunk(
   "clients/deleteClient",
   async (id: number, thunkAPI) => {
     try {
       await API.delete(`/company/clients/${id}/`);
-      return id; // Deleted client ID
+      return id;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-// Slice
 const clientsSlice = createSlice({
   name: "clients",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch clients
       .addCase(fetchClients.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -96,7 +91,6 @@ const clientsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Create client
       .addCase(createClient.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -109,7 +103,6 @@ const clientsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Update client
       .addCase(updateClient.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -125,7 +118,6 @@ const clientsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Delete client
       .addCase(deleteClient.pending, (state) => {
         state.loading = true;
         state.error = null;

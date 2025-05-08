@@ -1,7 +1,28 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import API from "../../utils/api";
 
-export const fetchBranches = createAsyncThunk(
+
+export interface Branch {
+  id: number;
+  name: string;
+}
+
+
+interface BranchesState {
+  data: Branch[];
+  loading: boolean;
+  error: string | null;
+}
+
+
+const initialState: BranchesState = {
+  data: [],
+  loading: false,
+  error: null,
+};
+
+
+export const fetchBranches = createAsyncThunk<Branch[]>(
   "branches/fetchBranches",
   async () => {
     const res = await API.get("/company/get/");
@@ -9,20 +30,17 @@ export const fetchBranches = createAsyncThunk(
   }
 );
 
+
 const branchesSlice = createSlice({
   name: "branches",
-  initialState: {
-    data: [],
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchBranches.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchBranches.fulfilled, (state, action) => {
+      .addCase(fetchBranches.fulfilled, (state, action: PayloadAction<Branch[]>) => {
         state.data = action.payload;
         state.loading = false;
       })
