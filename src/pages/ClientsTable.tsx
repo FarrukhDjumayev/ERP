@@ -50,11 +50,10 @@ if (values.branch_id) {
 }
 
 if (values.avatar && values.avatar.length > 0) {
-  formData.append("avatar", values.avatar[0].originFileObj); // Assuming this is the correct format
+  formData.append("avatar", values.avatar[0].originFileObj);
 }
 
 
-    // Assuming backend expects the 'name', 'phone', 'branch' fields and possibly an avatar file.
     if (editedClient) {
       await dispatch(updateClient({ id: editedClient.id, clientData: formData }));
       notification.success({ message: "Mijoz yangilandi!" });
