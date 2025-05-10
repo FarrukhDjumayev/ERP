@@ -106,7 +106,7 @@ const Login = () => {
         >
           <Particles
             particleColors={['	#39FF14', '#39FF14']}
-            particleCount={200}
+            particleCount={400}
             particleSpread={10}
             speed={0.3}
             particleBaseSize={100}

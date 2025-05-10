@@ -22,7 +22,7 @@ export default function Sidebar() {
       icon: <GrSchedule size={18} />,
     },
     {
-      path: "/bolimlar",
+      path: "",
       label: "Bo'limlar",
       icon: <GrSchedule size={18} />,
     },

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../utils/api";
 
-
 export const fetchShifts = createAsyncThunk(
   "shifts/fetchShifts",
   async (branchId: number, { rejectWithValue }) => {
@@ -14,7 +13,6 @@ export const fetchShifts = createAsyncThunk(
   }
 );
 
-
 export const createShift = createAsyncThunk(
   "shifts/createShift",
   async (shiftData: any) => {
@@ -22,8 +20,6 @@ export const createShift = createAsyncThunk(
     return res.data;
   }
 );
-
-
 
 export const updateShift = createAsyncThunk(
   "shifts/updateShift",
@@ -37,7 +33,6 @@ export const updateShift = createAsyncThunk(
   }
 );
 
-
 export const deleteShift = createAsyncThunk(
   "shifts/deleteShift",
   async (id: number, { rejectWithValue }) => {
@@ -50,7 +45,6 @@ export const deleteShift = createAsyncThunk(
   }
 );
 
-
 const shiftSlice = createSlice({
   name: "shifts",
   initialState: {
@@ -61,7 +55,6 @@ const shiftSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      
       .addCase(fetchShifts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -74,16 +67,12 @@ const shiftSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      
       .addCase(createShift.fulfilled, (state, action) => {
         state.data.push(action.payload);
       })
       .addCase(createShift.rejected, (state, action) => {
         state.error = action.payload as string;
       })
-
-      
       .addCase(updateShift.fulfilled, (state, action) => {
         const index = state.data.findIndex((shift) => shift.id === action.payload.id);
         if (index !== -1) {
@@ -93,8 +82,6 @@ const shiftSlice = createSlice({
       .addCase(updateShift.rejected, (state, action) => {
         state.error = action.payload as string;
       })
-
-      
       .addCase(deleteShift.fulfilled, (state, action) => {
         state.data = state.data.filter((shift) => shift.id !== action.payload);
       })

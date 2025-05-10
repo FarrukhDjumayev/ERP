@@ -39,36 +39,37 @@ export default function ClientTable() {
   };
 
   const handleModalOk = async () => {
-    try {
-      const values = await form.validateFields();
-      const formData = new FormData();
+  try {
+    const values = await form.validateFields();
+    const formData = new FormData();
+formData.append("name", values.name);
+formData.append("phone", values.phone);
 
-      formData.append("name", values.name);
-      formData.append("phone", values.phone);
+if (values.branch_id) {
+  formData.append("branch_id", values.branch_id.toString());
+}
 
-      if (values.branch_id) {
-        formData.append("branch", values.branch_id.toString());
-      }
-
-      if (values.avatar && values.avatar.length > 0) {
-        formData.append("avatar", values.avatar[0].originFileObj);
-      }
+if (values.avatar && values.avatar.length > 0) {
+  formData.append("avatar", values.avatar[0].originFileObj); // Assuming this is the correct format
+}
 
 
-      if (editedClient) {
-        await dispatch(updateClient({ id: editedClient.id, clientData: formData }));
-        notification.success({ message: "Mijoz yangilandi!" });
-      } else {
-        await dispatch(createClient(formData));
-        notification.success({ message: "Mijoz qo‘shildi!" });
-      }
-
-      setIsModalVisible(false);
-      form.resetFields();
-    } catch (error) {
-      notification.error({ message: "Xatolik" });
+    // Assuming backend expects the 'name', 'phone', 'branch' fields and possibly an avatar file.
+    if (editedClient) {
+      await dispatch(updateClient({ id: editedClient.id, clientData: formData }));
+      notification.success({ message: "Mijoz yangilandi!" });
+    } else {
+      await dispatch(createClient(formData));
+      notification.success({ message: "Mijoz qo‘shildi!" });
     }
-  };
+
+    setIsModalVisible(false);
+    form.resetFields();
+  } catch (error) {
+    notification.error({ message: `Client create error: ${(error instanceof Error && error.message) ? error.message : 'Unknown error'}` });
+  }
+};
+
 
   const handleModalCancel = () => {
     setIsModalVisible(false);
